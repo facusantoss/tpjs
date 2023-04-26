@@ -6,8 +6,8 @@ const vehiculos =[
     {id: 5, marca: "toyota", modelo: "yaris", anio: 2020},
   ];
   
-  const vehiculosJSON = JSON.stringify(vehiculos);
-  console.log(vehiculosJSON);
+
+  localStorage.setItem ("vehiculo", JSON.stringify (vehiculos))
   
   vehiculos.forEach(function(vehiculo, indice) {
     console.log("Vehículo " + (indice+1) + ": Marca: " + vehiculo.marca + ", Modelo: " + vehiculo.modelo);
@@ -19,9 +19,13 @@ const vehiculos =[
   console.log(toyotas);
   
   const newAuto= JSON.stringify(toyotas);
-  console.log(newAuto);
+  localStorage.setItem("autitos", newAuto)
+
+  let toyotaFiltro= JSON.parse(localStorage.getItem("toyotas"))
+  console.log(toyotaFiltro);
   
   
+
   
   
   const validarAnio = (anio) => /^\d{4}$/.test(anio);
