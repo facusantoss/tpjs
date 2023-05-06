@@ -3,7 +3,7 @@ const username = document.querySelector("#username");
 const password = document.querySelector("#password");
 const loginButton = document.querySelector("#loginButton");
 const check = document.querySelector("#check");
- const message = document.querySelector("#message");
+
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -12,13 +12,37 @@ form.addEventListener("submit", (e) => {
   console.log(`Usuario: ${user} Pass: ${pass}`);
 });
 
+function validarUsuario() {
+  const username = document.querySelector("#username").value;
+  const password = document.querySelector("#password").value;
+
+  
+  const userR = JSON.parse(localStorage.getItem("userR"));
+
+
+  if (username === userR.usernameR && password === userR.passwordR) {
+    
+    window.location.href = './pages/cotizador.html';
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Usuario o contraseña incorrectos',
+    });
+  }
+}
+
+document.querySelector('#loginButton').addEventListener("click", validarUsuario);
+
 //localstorage
 
 function guardar(valor) {
   let user = { usuario: username.value, pass: password.value };
 
   if (user.usuario === "" || user.pass === "") {
-    message.innerHTML = ("Error todos los campos requeridos");
+    Swal.fire({
+      icon: 'error',
+      text: 'Todos los campos son requeridos',
+    })
     return;
   } else {
     if (valor === "sessionStorage") {

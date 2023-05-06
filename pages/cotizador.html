@@ -8,26 +8,56 @@
     <title>Cotizador</title>
 </head>
 <body>
-    <div id="cotizador">
-        <h1 class="Coti">Cotizador de seguros</h1>
-        
-        <form class="cot">
-          <label class="car" for="marca">Marca:</label>
-          <input class="car1" type="text" id="marca" name="marca">
-          <label class="car" for="modelo">Modelo:</label>
-          <input class="car1" type="text" id="modelo" name="modelo">
-          <label class="car" for="anio">Año:</label>
-          <input class="car1" type="text" id="anio" name="anio">
-          
-          <button onclick="calcularCostoRC()">Responsabilidad Civil</button>
-          <button onclick="calcularCostoTC()">Terceros Completo</button>
-          <button onclick="calcularCostoTR()">Todo Riesgo</button>
-          <div id="costo"></div>
-
-          <button class="botonCoti" type="button" onclick="calcularCosto()">Calcular costo</button>
-        </form>
-    </div>
-
+  <div id="cotizador">
+    <h1 class="coti">Cotizador de seguros de autos</h1>
+    <form>
+      <div class="cot">
+        <label class="car">Marca:</label>
+        <div class="solapas">
+          <input type="checkbox" class="solapa-checkbox" id="solapa1">
+          <label for="solapa1" class="solapa-label">Seleccione una marca</label>
+          <div class="solapa-contenido">
+            <select id="marca">
+              <option value="">--Seleccione--</option>
+            </select>
+          </div>
+        </div>
+        <label class="car">Modelo:</label>
+        <div class="solapas">
+          <input type="checkbox" class="solapa-checkbox" id="solapa2">
+          <label for="solapa2" class="solapa-label">Seleccione un modelo</label>
+          <div class="solapa-contenido">
+            <select id="modelo" >
+              <option value="">--Seleccione--</option>
+            </select>
+          </div>
+        </div>
+        <label class="car">Año:</label>
+        <div class="solapas">
+          <input type="checkbox" class="solapa-checkbox" id="solapa3">
+          <label for="solapa3" class="solapa-label">Seleccione un año</label>
+          <div class="solapa-contenido">
+            <select id="anio" >
+              <option value="">--Seleccione--</option>
+            </select>
+          </div>
+        </div>
+        <label class="car">Tipo de seguro:</label>
+        <select id="seguro">
+          <option value="responsabilidad-civil">Responsabilidad Civil</option>
+          <option value="terceros-completo">Terceros Completo</option>
+          <option value="todo-riesgo">Todo Riesgo</option>
+        </select>
+      </div>
+      <button type="button" class="botonCoti" id="cotizar">Cotizar</button>
+    </form>
+    <div id="costo"></div>
+    <div id="marcas"></div>
+    <div id="modelos"></div>
+    <div id="anios"></div>
+  </div>
+  
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/main.js"></script>
 </body>
 </html>

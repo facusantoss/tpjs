@@ -1,65 +1,95 @@
-const vehiculos =[
-    {id: 1, marca: "toyota", modelo: "etios", anio: 2018},
-    {id: 2, marca: "peugeot", modelo: "208", anio: 2017},
-    {id: 3, marca: "fiat", modelo: "punto", anio: 2013},
-    {id: 4, marca: "renault", modelo: "kwid", anio: 2019},
-    {id: 5, marca: "toyota", modelo: "yaris", anio: 2020},
-  ];
-  
-
-  localStorage.setItem ("vehiculo", JSON.stringify (vehiculos))
-  
-  vehiculos.forEach(function(vehiculo, indice) {
-    console.log("Vehículo " + (indice+1) + ": Marca: " + vehiculo.marca + ", Modelo: " + vehiculo.modelo);
-  });
-  
-  
-  
-  const toyotas = vehiculos.filter(vehiculo => vehiculo.marca === "toyota");
-  console.log(toyotas);
-  
-  const newAuto= JSON.stringify(toyotas);
-  localStorage.setItem("autitos", newAuto)
-
-  let toyotaFiltro= JSON.parse(localStorage.getItem("toyotas"))
-  console.log(toyotaFiltro);
-  
-  
+const marcaSelector = document.getElementById('marca');
+const modeloSelector = document.getElementById('modelo');
+const anioSelector = document.getElementById('anio');
 
   
-  
-  const validarAnio = (anio) => /^\d{4}$/.test(anio);
-  
-  function agregarVehiculo(event) {
-    event.preventDefault();
-    const marca = document.getElementById("marca").value;
-    const modelo = document.getElementById("modelo").value;
-    const anio = document.getElementById("anio").value;
-  
+const marcaSelect = document.querySelector('#marca');
+const modeloSelect = document.querySelector('#modelo');
+const anioSelect = document.querySelector('#anio');
+const seguroSelect = document.querySelector('#seguro');
+
+
+// FETCH
+fetch('../data/datos.json')
+  .then(response => response.json())
+  .then(data => {
+
     
-  
-  
-    const autoCliente= new nuevoAuto(marca, modelo, anio);
-    vehiculos.push(autoCliente);
-    alert("Vehículo agregado correctamente");
+    const marcas = data.map(item => item.nombre);
+    marcas.forEach(marca => {
+      const option = document.createElement('option');
+      option.textContent = marca;
+      marcaSelector.appendChild(option);
+    });
+
+    
+    marcaSelector.addEventListener('change', () => {
+      const modelos = data.find(item => item.nombre === marcaSelector.value).modelos;
+      modeloSelector.innerHTML = '';
+      anioSelector.innerHTML = '';
+      modelos.forEach(modelo => {
+        const option = document.createElement('option');
+        option.textContent = modelo.nombre;
+        modeloSelector.appendChild(option);
+      });
+    });
+
+    
+    modeloSelector.addEventListener('change', () => {
+      const marca = data.find(item => item.nombre === marcaSelector.value);
+      const modelo = marca.modelos.find(item => item.nombre === modeloSelector.value);
+      anioSelector.innerHTML = '';
+      modelo.anios.forEach(anio => {
+        const option = document.createElement('option');
+        option.textContent = anio;
+        anioSelector.appendChild(option);
+      });
+    });
+
+  })
+  .catch(error => console.error(error));
+
+
+  function calcularCosto() {
+    const tipoSeguro = document.getElementById("seguro").value;
+    let costo = 0;
+    switch (tipoSeguro) {
+      case "responsabilidad-civil":
+        costo = 3000;
+        break;
+      case "terceros-completo":
+        costo = 8000;
+        break;
+      case "todo-riesgo":
+        costo = 14000;
+        break;
+    }
+    
+    Swal.fire({
+      icon: 'info',
+      text: `El costo del seguro seleccionado es de $${costo}`,
+    })
   }
-  
-  function calcularCostoRC() {
-    const costo = 3000;
-    document.getElementById("costoSeguro").innerHTML = "Tu costo es de $ " + costo;
-  }
-  
-  
-  function calcularCostoTC() {
-    const costo = 8000;
-    document.getElementById("costoSeguro").innerHTML = "Tu costo es de $ " + costo;
-  }
-  
-  
-  function calcularCostoTR() {
-    const costo = 14000;
-    document.getElementById("costoSeguro").innerHTML = "Tu costo es de $ " + costo;
-  }
+
+   document.getElementById("cotizar").addEventListener("click", calcularCosto);
+
+
+
+   marcaSelect.addEventListener('change', function() {
+  localStorage.setItem('marca', marcaSelect.value);
+});
+
+modeloSelect.addEventListener('change', function() {
+  localStorage.setItem('modelo', modeloSelect.value);
+});
+
+anioSelect.addEventListener('change', function() {
+  localStorage.setItem('anio', anioSelect.value);
+});
+
+seguroSelect.addEventListener('change', function() {
+  localStorage.setItem('seguro', seguroSelect.value);
+});
   
   
   
