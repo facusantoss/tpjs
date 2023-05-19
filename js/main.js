@@ -9,12 +9,12 @@ const anioSelect = document.querySelector('#anio');
 const seguroSelect = document.querySelector('#seguro');
 
 
-// cargar los datos del archivo JSON
+// carga los datos del archivo JSON
 fetch('../data/datos.json')
   .then(response => response.json())
   .then(data => {
 
-    // crear las opciones para el selector de marcas
+    // crea las opciones para el selector de marcas
     const marcas = data.map(item => item.nombre);
     marcas.forEach(marca => {
       const option = document.createElement('option');
@@ -22,7 +22,7 @@ fetch('../data/datos.json')
       marcaSelector.appendChild(option);
     });
 
-    // actualizar los modelos cuando se cambia la marca
+    // actualiza los modelos cuando se cambia la marca
     marcaSelector.addEventListener('change', () => {
       const modelos = data.find(item => item.nombre === marcaSelector.value).modelos;
       modeloSelector.innerHTML = '';
@@ -43,7 +43,7 @@ fetch('../data/datos.json')
     }
     });
 
-    // actualizar los años cuando se cambia el modelo
+    // actualiza los años cuando se cambia el modelo
     modeloSelector.addEventListener('change', () => {
       const marca = data.find(item => item.nombre === marcaSelector.value);
       const modelo = marca.modelos.find(item => item.nombre === modeloSelector.value);
@@ -76,25 +76,7 @@ function validarCampos() {
   return true;
 }
 
-function calcularCosto() {
-  if (!validarCampos()) {
-    return;
-  }
 
-  const marca = marcaSelector.value;
-  const modelo = modeloSelector.value;
-  const anio = anioSelector.value;
-  const tipoSeguro = seguroSelect.value;
-
-  const costo = calcularCostoSeguro(marca, modelo, anio, tipoSeguro);
-
-  if (costo !== 0) {
-    Swal.fire({
-      icon: 'info',
-      text: `El costo del seguro seleccionado es de $${costo}`,
-    });
-  }
-}
 
 function calcularCosto() {
   if (!validarCampos()) {
@@ -121,25 +103,25 @@ function calcularCostoSeguro(marca, modelo, anio, tipoSeguro) {
   let factorAnio = 0;
   let factorTipoSeguro = 0;
 
-  // Determinar el costo base según el tipo de seguro seleccionado
+  // Determina el costo base según el tipo de seguro seleccionado
   switch (tipoSeguro) {
     case 'responsabilidad-civil':
-      factorTipoSeguro = 0.8; // Reducción del 20% en el costo base
+      factorTipoSeguro = 0.8; 
       costoBase = 3000;
       break;
     case 'terceros-completo':
-      factorTipoSeguro = 1.0; // Sin modificación en el costo base
+      factorTipoSeguro = 1.0; 
       costoBase = 8000;
       break;
     case 'todo-riesgo':
-      factorTipoSeguro = 1.2; // Aumento del 20% en el costo base
+      factorTipoSeguro = 1.2; 
       costoBase = 14000;
       break;
     default:
       break;
   }
 
-  // Determinar el factor según el año del auto
+  // Determina el factor según el año del auto
   const anioActual = new Date().getFullYear();
   const antiguedad = anioActual - anio;
   if (antiguedad >= 10) {
@@ -151,7 +133,7 @@ function calcularCostoSeguro(marca, modelo, anio, tipoSeguro) {
   } else if (antiguedad >= 3) {
     factorAnio = 0.9; 
   } else {
-    factorAnio = 1.0; // Sin modificación para autos con menos de 5 años de antigüedad
+    factorAnio = 1.0; 
   }
 
   const costo = costoBase * factorAnio * factorTipoSeguro;
@@ -174,6 +156,7 @@ modeloSelect.addEventListener('change', function() {
   localStorage.setItem('modelo', modeloSelect.value);
 });
 
+
 anioSelect.addEventListener('change', function() {
   localStorage.setItem('anio', anioSelect.value);
 });
@@ -182,4 +165,26 @@ seguroSelect.addEventListener('change', function() {
   localStorage.setItem('seguro', seguroSelect.value);
 });
   
-  
+
+document.addEventListener('DOMContentLoaded', function() {
+  const storedMarca = localStorage.getItem('marca');
+  const storedModelo = localStorage.getItem('modelo');
+  const storedAnio = localStorage.getItem('anio');
+  const storedSeguro = localStorage.getItem('seguro');
+
+  if (storedMarca) {
+    marcaSelect.value = storedMarca;
+  }
+
+  if (storedModelo) {
+    modeloSelect.value = storedModelo;
+  }
+
+  if (storedAnio) {
+    anioSelect.value = storedAnio;
+  }
+
+  if (storedSeguro) {
+    seguroSelect.value = storedSeguro;
+  }
+});
